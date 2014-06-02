@@ -1,0 +1,111 @@
+Enter file contents here
+package code;
+
+public class GameLife {
+	private int sizeRows;
+	private int sizeColums;
+	private int array[][] ;
+	public int getSizeRows() {
+		return sizeRows;
+	}
+	public int getSizeColums() {
+		return sizeColums;
+	}
+	public int[][] getArray() {
+		return array;
+	}
+	public void setArray(int[][] array) {
+		this.array = array;
+		this.sizeRows = array.length;
+		if(this.sizeRows>0)
+			this.sizeColums = array[0].length;
+	}
+	
+	public int nextNumberOfCurrentPlace(int currentValue,int sumValueOfNeibors){
+
+		if(currentValue==1)
+		{
+			if(sumValueOfNeibors==2||sumValueOfNeibors==3)
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		else
+		{	
+			if(sumValueOfNeibors==3)
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+	
+	}
+	
+	public int numberOfNeibors(int x,int y)
+	{
+		if(x==0 && y==0)
+		{
+			return array[x][y+1]+array[x+1][y+1]+array[x+1][y];
+		}
+		else if(x==0 && y<getSizeColums()-1)
+		{
+			return array[x][y+1]+array[x][y-1]+array[x+1][y-1]+array[x+1][y+1]+array[x+1][y];
+		}
+		else if(x<getSizeRows()-1 && y==0)
+		{
+			return array[x][y+1]+array[x+1][y+1]+array[x+1][y]+array[x-1][y+1]+array[x-1][y];
+		}
+		else if(x==getSizeRows()-1 && y==getSizeRows()-1)
+		{
+			return array[x][y-1]+array[x-1][y-1]+array[x-1][y];
+		}
+		else if(x==getSizeRows()-1 &&y>0)
+		{
+			return array[x][y-1]+array[x][y+1]+array[x-1][y-1]+array[x-1][y]+array[x-1][y+1];
+		}
+		else if(x>0 && y==getSizeColums()-1)
+		{
+			return array[x-1][y]+array[x+1][y]+array[x][y-1]+array[x-1][y-1]+array[x+1][y-1];
+		}
+		else if(x==0 && y==getSizeColums()-1)
+		{
+			return array[x][y-1]+array[x+1][y-1]+array[x+1][y];
+		}
+		else if(x==getSizeRows()-1 && y==0)
+		{
+			return array[x][y+1]+array[x-1][y+1]+array[x-1][y];
+		}
+		else
+		{
+			return array[x][y-1]+array[x][y+1]+array[x-1][y]+array[x+1][y]+array[x+1][y+1]+array[x-1][y-1]+array[x-1][y+1]+array[x+1][y-1];
+		}
+	}
+	
+
+	
+	public int nextNumberOfAPlace(int x,int y)
+	{	
+		int currentValue = array[x][y];
+		int nob = numberOfNeibors(x, y);
+		int nextValue = nextNumberOfCurrentPlace(currentValue, nob);
+		return nextValue;
+	}
+	
+	public int[][] generateNextGeneration()
+	{
+		int tempArray[][] = new int[sizeRows][sizeColums];
+		for(int i=0;i<sizeRows;i++)
+			for(int j=0;j<sizeColums;j++)
+			{
+				tempArray[i][j] = nextNumberOfAPlace(i,j);
+			}
+		return tempArray;
+	}
+}
